@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.2
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jun 13, 2026 at 11:51 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost
+-- Generation Time: Jun 13, 2026 at 04:52 PM
+-- Server version: 9.2.0
+-- PHP Version: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,9 +28,9 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cache` (
-  `key` varchar(255) NOT NULL,
-  `value` mediumtext NOT NULL,
-  `expiration` int(11) NOT NULL
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -40,9 +40,9 @@ CREATE TABLE `cache` (
 --
 
 CREATE TABLE `cache_locks` (
-  `key` varchar(255) NOT NULL,
-  `owner` varchar(255) NOT NULL,
-  `expiration` int(11) NOT NULL
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `expiration` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -52,13 +52,13 @@ CREATE TABLE `cache_locks` (
 --
 
 CREATE TABLE `failed_jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `uuid` varchar(255) NOT NULL,
-  `connection` text NOT NULL,
-  `queue` text NOT NULL,
-  `payload` longtext NOT NULL,
-  `exception` longtext NOT NULL,
-  `failed_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `id` bigint UNSIGNED NOT NULL,
+  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -68,11 +68,11 @@ CREATE TABLE `failed_jobs` (
 --
 
 CREATE TABLE `idempotency_keys` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `key` varchar(255) NOT NULL,
-  `type` varchar(255) DEFAULT NULL,
-  `resource_type` varchar(255) DEFAULT NULL,
-  `resource_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `resource_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `resource_id` bigint UNSIGNED DEFAULT NULL,
   `used_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
@@ -85,7 +85,8 @@ CREATE TABLE `idempotency_keys` (
 INSERT INTO `idempotency_keys` (`id`, `key`, `type`, `resource_type`, `resource_id`, `used_at`, `created_at`, `updated_at`) VALUES
 (1, 'pay-001-abc', 'payment_initiate', 'payment', 1, '2026-06-13 00:08:08', '2026-06-13 00:08:08', '2026-06-13 00:08:08'),
 (2, 'pay-001-xyz', 'payment_initiate', 'payment', 2, '2026-06-13 00:09:46', '2026-06-13 00:09:46', '2026-06-13 00:09:46'),
-(3, 'pay-003-fail', 'payment_initiate', 'payment', 3, '2026-06-13 00:14:09', '2026-06-13 00:14:09', '2026-06-13 00:14:09');
+(3, 'pay-003-fail', 'payment_initiate', 'payment', 3, '2026-06-13 00:14:09', '2026-06-13 00:14:09', '2026-06-13 00:14:09'),
+(4, 'pay-110-mbp', 'payment_initiate', 'payment', 4, '2026-06-13 10:19:13', '2026-06-13 10:19:13', '2026-06-13 10:19:13');
 
 -- --------------------------------------------------------
 
@@ -94,12 +95,12 @@ INSERT INTO `idempotency_keys` (`id`, `key`, `type`, `resource_type`, `resource_
 --
 
 CREATE TABLE `installments` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `purchase_id` bigint(20) UNSIGNED NOT NULL,
-  `installment_number` int(10) UNSIGNED NOT NULL,
-  `amount` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `purchase_id` bigint UNSIGNED NOT NULL,
+  `installment_number` int UNSIGNED NOT NULL,
+  `amount` bigint UNSIGNED NOT NULL,
   `due_date` date NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'pending' COMMENT 'pending, paid, failed, overdue',
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending, paid, failed, overdue',
   `paid_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -114,7 +115,15 @@ INSERT INTO `installments` (`id`, `purchase_id`, `installment_number`, `amount`,
 (1, 1, 1, 1250, '2026-07-13', 'paid', '2026-06-13 00:11:20', '2026-06-13 00:04:44', '2026-06-13 00:11:20', NULL),
 (2, 1, 2, 1250, '2026-08-13', 'pending', NULL, '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL),
 (3, 1, 3, 1250, '2026-09-13', 'pending', NULL, '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL),
-(4, 1, 4, 1250, '2026-10-13', 'pending', NULL, '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL);
+(4, 1, 4, 1250, '2026-10-13', 'pending', NULL, '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL),
+(5, 2, 1, 1638, '2026-07-13', 'pending', NULL, '2026-06-13 10:02:57', '2026-06-13 10:02:57', NULL),
+(6, 2, 2, 1638, '2026-08-13', 'pending', NULL, '2026-06-13 10:02:57', '2026-06-13 10:02:57', NULL),
+(7, 2, 3, 1637, '2026-09-13', 'pending', NULL, '2026-06-13 10:02:57', '2026-06-13 10:02:57', NULL),
+(8, 2, 4, 1637, '2026-10-13', 'pending', NULL, '2026-06-13 10:02:57', '2026-06-13 10:02:57', NULL),
+(9, 3, 1, 1638, '2026-07-13', 'paid', '2026-06-13 10:30:54', '2026-06-13 10:07:04', '2026-06-13 10:30:54', NULL),
+(10, 3, 2, 1638, '2026-08-13', 'pending', NULL, '2026-06-13 10:07:04', '2026-06-13 10:07:04', NULL),
+(11, 3, 3, 1637, '2026-09-13', 'pending', NULL, '2026-06-13 10:07:04', '2026-06-13 10:07:04', NULL),
+(12, 3, 4, 1637, '2026-10-13', 'pending', NULL, '2026-06-13 10:07:04', '2026-06-13 10:07:04', NULL);
 
 -- --------------------------------------------------------
 
@@ -123,13 +132,13 @@ INSERT INTO `installments` (`id`, `purchase_id`, `installment_number`, `amount`,
 --
 
 CREATE TABLE `jobs` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `queue` varchar(255) NOT NULL,
-  `payload` longtext NOT NULL,
-  `attempts` tinyint(3) UNSIGNED NOT NULL,
-  `reserved_at` int(10) UNSIGNED DEFAULT NULL,
-  `available_at` int(10) UNSIGNED NOT NULL,
-  `created_at` int(10) UNSIGNED NOT NULL
+  `id` bigint UNSIGNED NOT NULL,
+  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint UNSIGNED NOT NULL,
+  `reserved_at` int UNSIGNED DEFAULT NULL,
+  `available_at` int UNSIGNED NOT NULL,
+  `created_at` int UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -139,16 +148,16 @@ CREATE TABLE `jobs` (
 --
 
 CREATE TABLE `job_batches` (
-  `id` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `total_jobs` int(11) NOT NULL,
-  `pending_jobs` int(11) NOT NULL,
-  `failed_jobs` int(11) NOT NULL,
-  `failed_job_ids` longtext NOT NULL,
-  `options` mediumtext DEFAULT NULL,
-  `cancelled_at` int(11) DEFAULT NULL,
-  `created_at` int(11) NOT NULL,
-  `finished_at` int(11) DEFAULT NULL
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `total_jobs` int NOT NULL,
+  `pending_jobs` int NOT NULL,
+  `failed_jobs` int NOT NULL,
+  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `cancelled_at` int DEFAULT NULL,
+  `created_at` int NOT NULL,
+  `finished_at` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -158,15 +167,15 @@ CREATE TABLE `job_batches` (
 --
 
 CREATE TABLE `ledger_entries` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `purchase_id` bigint(20) UNSIGNED NOT NULL,
-  `merchant_id` bigint(20) UNSIGNED NOT NULL,
-  `entry_type` varchar(255) NOT NULL COMMENT 'Debit , Credit',
-  `amount` bigint(20) NOT NULL,
-  `running_balance` bigint(20) NOT NULL,
-  `reference_type` varchar(255) DEFAULT NULL,
-  `reference_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `purchase_id` bigint UNSIGNED NOT NULL,
+  `merchant_id` bigint UNSIGNED NOT NULL,
+  `entry_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` bigint NOT NULL,
+  `running_balance` bigint NOT NULL,
+  `reference_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `reference_id` bigint UNSIGNED DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -177,7 +186,10 @@ CREATE TABLE `ledger_entries` (
 
 INSERT INTO `ledger_entries` (`id`, `purchase_id`, `merchant_id`, `entry_type`, `amount`, `running_balance`, `reference_type`, `reference_id`, `description`, `created_at`, `updated_at`) VALUES
 (1, 1, 2, 'purchase_created', -5000, -5000, 'purchase', 1, 'Purchase created: 5000 BDT due', '2026-06-13 00:04:44', '2026-06-13 00:04:44'),
-(2, 1, 2, 'payment_received', 1250, -3750, 'payment', 1, 'Payment confirmed for installment #1', '2026-06-13 00:11:20', '2026-06-13 00:11:20');
+(2, 1, 2, 'payment_received', 1250, -3750, 'payment', 1, 'Payment confirmed for installment #1', '2026-06-13 00:11:20', '2026-06-13 00:11:20'),
+(3, 2, 2, 'purchase_created', -6550, -6550, 'purchase', 2, 'Purchase created: 6550 BDT due', '2026-06-13 10:02:57', '2026-06-13 10:02:57'),
+(4, 3, 2, 'purchase_created', -6550, -6550, 'purchase', 3, 'Purchase created: 6550 BDT due', '2026-06-13 10:07:04', '2026-06-13 10:07:04'),
+(5, 3, 2, 'payment_received', 1638, -4912, 'payment', 4, 'Payment confirmed for installment #1', '2026-06-13 10:30:54', '2026-06-13 10:30:54');
 
 -- --------------------------------------------------------
 
@@ -186,11 +198,11 @@ INSERT INTO `ledger_entries` (`id`, `purchase_id`, `merchant_id`, `entry_type`, 
 --
 
 CREATE TABLE `merchants` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `code` varchar(255) NOT NULL,
-  `contact` varchar(255) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -211,9 +223,9 @@ INSERT INTO `merchants` (`id`, `name`, `code`, `contact`, `address`, `created_at
 --
 
 CREATE TABLE `migrations` (
-  `id` int(10) UNSIGNED NOT NULL,
-  `migration` varchar(255) NOT NULL,
-  `batch` int(11) NOT NULL
+  `id` int UNSIGNED NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `batch` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -240,13 +252,13 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `orders` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `merchant_id` bigint(20) UNSIGNED NOT NULL,
-  `order_number` varchar(255) DEFAULT NULL,
-  `total_amount` bigint(20) UNSIGNED NOT NULL,
-  `currency` varchar(3) NOT NULL DEFAULT 'BDT',
-  `status` varchar(255) NOT NULL DEFAULT 'pending' COMMENT 'pending, delivered, cancelled',
+  `id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `merchant_id` bigint UNSIGNED NOT NULL,
+  `order_number` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `total_amount` bigint UNSIGNED NOT NULL,
+  `currency` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'BDT',
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending, delivered, cancelled',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
@@ -257,7 +269,9 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `merchant_id`, `order_number`, `total_amount`, `currency`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(2, 1, 2, 'ORD-1781330684', 5000, 'BDT', 'pending', '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL);
+(2, 1, 2, 'ORD-1781330684', 5000, 'BDT', 'pending', '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL),
+(3, 1, 2, 'ORD-1781366577', 6550, 'BDT', 'pending', '2026-06-13 10:02:57', '2026-06-13 10:02:57', NULL),
+(4, 1, 2, 'ORD-20260613160704-5736', 6550, 'BDT', 'pending', '2026-06-13 10:07:04', '2026-06-13 10:07:04', NULL);
 
 -- --------------------------------------------------------
 
@@ -266,8 +280,8 @@ INSERT INTO `orders` (`id`, `user_id`, `merchant_id`, `order_number`, `total_amo
 --
 
 CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) NOT NULL,
-  `token` varchar(255) NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -278,12 +292,12 @@ CREATE TABLE `password_reset_tokens` (
 --
 
 CREATE TABLE `payments` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `installment_id` bigint(20) UNSIGNED NOT NULL,
-  `idempotency_key` varchar(255) NOT NULL,
-  `transaction_id` varchar(255) DEFAULT NULL,
-  `amount` bigint(20) UNSIGNED NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'pending' COMMENT 'pending, confirmed, failed',
+  `id` bigint UNSIGNED NOT NULL,
+  `installment_id` bigint UNSIGNED NOT NULL,
+  `idempotency_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `transaction_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `amount` bigint UNSIGNED NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending' COMMENT 'pending, confirmed, failed',
   `initiated_at` timestamp NULL DEFAULT NULL,
   `confirmed_at` timestamp NULL DEFAULT NULL,
   `failed_at` timestamp NULL DEFAULT NULL,
@@ -299,7 +313,8 @@ CREATE TABLE `payments` (
 INSERT INTO `payments` (`id`, `installment_id`, `idempotency_key`, `transaction_id`, `amount`, `status`, `initiated_at`, `confirmed_at`, `failed_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
 (1, 1, 'pay-001-abc', 'TXN-6A2CF3C891EFF', 1250, 'confirmed', '2026-06-13 00:08:08', '2026-06-13 00:11:20', NULL, '2026-06-13 00:08:08', '2026-06-13 00:11:20', NULL),
 (2, 1, 'pay-001-xyz', 'TXN-6A2CF42A59D70', 1250, 'pending', '2026-06-13 00:09:46', NULL, NULL, '2026-06-13 00:09:46', '2026-06-13 00:09:46', NULL),
-(3, 2, 'pay-003-fail', 'TXN-6A2CF531CBDDC', 1250, 'pending', '2026-06-13 00:14:09', NULL, NULL, '2026-06-13 00:14:09', '2026-06-13 00:14:09', NULL);
+(3, 2, 'pay-003-fail', 'TXN-6A2CF531CBDDC', 1250, 'pending', '2026-06-13 00:14:09', NULL, NULL, '2026-06-13 00:14:09', '2026-06-13 00:14:09', NULL),
+(4, 9, 'pay-110-mbp', 'TXN-6A2D8301C3C87', 1638, 'confirmed', '2026-06-13 10:19:13', '2026-06-13 10:30:54', NULL, '2026-06-13 10:19:13', '2026-06-13 10:30:54', NULL);
 
 -- --------------------------------------------------------
 
@@ -308,13 +323,13 @@ INSERT INTO `payments` (`id`, `installment_id`, `idempotency_key`, `transaction_
 --
 
 CREATE TABLE `purchases` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `order_id` bigint(20) UNSIGNED NOT NULL,
-  `user_id` bigint(20) UNSIGNED NOT NULL,
-  `number_of_installments` int(11) NOT NULL,
-  `amount` bigint(20) UNSIGNED NOT NULL,
-  `currency` varchar(3) NOT NULL DEFAULT 'BDT',
-  `status` varchar(255) NOT NULL DEFAULT 'active' COMMENT 'active, completed, cancelled',
+  `id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `number_of_installments` int NOT NULL,
+  `amount` bigint UNSIGNED NOT NULL,
+  `currency` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'BDT',
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'active' COMMENT 'active, completed, cancelled',
   `approved_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -326,7 +341,9 @@ CREATE TABLE `purchases` (
 --
 
 INSERT INTO `purchases` (`id`, `order_id`, `user_id`, `number_of_installments`, `amount`, `currency`, `status`, `approved_at`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 2, 1, 4, 5000, 'BDT', 'active', '2026-06-13 00:04:44', '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL);
+(1, 2, 1, 4, 5000, 'BDT', 'active', '2026-06-13 00:04:44', '2026-06-13 00:04:44', '2026-06-13 00:04:44', NULL),
+(2, 3, 1, 4, 6550, 'BDT', 'active', '2026-06-13 10:02:57', '2026-06-13 10:02:57', '2026-06-13 10:02:57', NULL),
+(3, 4, 1, 4, 6550, 'BDT', 'active', '2026-06-13 10:07:04', '2026-06-13 10:07:04', '2026-06-13 10:07:04', NULL);
 
 -- --------------------------------------------------------
 
@@ -335,12 +352,12 @@ INSERT INTO `purchases` (`id`, `order_id`, `user_id`, `number_of_installments`, 
 --
 
 CREATE TABLE `sessions` (
-  `id` varchar(255) NOT NULL,
-  `user_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `ip_address` varchar(45) DEFAULT NULL,
-  `user_agent` text DEFAULT NULL,
-  `payload` longtext NOT NULL,
-  `last_activity` int(11) NOT NULL
+  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci,
+  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `last_activity` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -350,12 +367,12 @@ CREATE TABLE `sessions` (
 --
 
 CREATE TABLE `users` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `id` bigint UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) NOT NULL,
-  `remember_token` varchar(100) DEFAULT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -375,25 +392,26 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 --
 
 CREATE TABLE `webhook_events` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `event_id` varchar(255) NOT NULL,
-  `event_type` varchar(255) NOT NULL,
-  `payment_id` bigint(20) UNSIGNED DEFAULT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payload`)),
+  `id` bigint UNSIGNED NOT NULL,
+  `event_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payment_id` bigint UNSIGNED DEFAULT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `received_at` timestamp NULL DEFAULT NULL,
   `processed_at` timestamp NULL DEFAULT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'received' COMMENT 'received, processed, failed',
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'received' COMMENT 'received, processed, failed',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ;
 
 --
 -- Dumping data for table `webhook_events`
 --
 
 INSERT INTO `webhook_events` (`id`, `event_id`, `event_type`, `payment_id`, `payload`, `received_at`, `processed_at`, `status`, `created_at`, `updated_at`, `deleted_at`) VALUES
-(1, 'evt-001', 'payment.confirmed', 1, '[]', '2026-06-13 00:11:20', '2026-06-13 00:11:20', 'processed', '2026-06-13 00:11:20', '2026-06-13 00:11:20', NULL);
+(1, 'evt-001', 'payment.confirmed', 1, '[]', '2026-06-13 00:11:20', '2026-06-13 00:11:20', 'processed', '2026-06-13 00:11:20', '2026-06-13 00:11:20', NULL),
+(2, 'evt-0010', 'payment.confirmed', 4, '[]', '2026-06-13 10:30:54', '2026-06-13 10:30:54', 'processed', '2026-06-13 10:30:54', '2026-06-13 10:30:54', NULL);
 
 --
 -- Indexes for dumped tables
@@ -530,73 +548,73 @@ ALTER TABLE `webhook_events`
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `idempotency_keys`
 --
 ALTER TABLE `idempotency_keys`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `installments`
 --
 ALTER TABLE `installments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `jobs`
 --
 ALTER TABLE `jobs`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `ledger_entries`
 --
 ALTER TABLE `ledger_entries`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `merchants`
 --
 ALTER TABLE `merchants`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `webhook_events`
 --
 ALTER TABLE `webhook_events`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables

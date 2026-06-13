@@ -1,0 +1,315 @@
+{
+  "info": {
+    "_postman_id": "f5c602e8-ed20-481e-a675-ed3b547e67ac",
+    "name": "Moby",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "15528806"
+  },
+  "item": [
+    {
+      "name": "Purchases Submit",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "user_id",
+              "value": " 1",
+              "type": "text"
+            },
+            {
+              "key": "merchant_id",
+              "value": " 2",
+              "type": "text"
+            },
+            {
+              "key": "amount",
+              "value": " 6550",
+              "type": "text"
+            },
+            {
+              "key": "currency",
+              "value": "BDT",
+              "type": "text",
+              "uuid": "47176281-12ea-41c2-afaf-a7997b144394"
+            },
+            {
+              "key": "number_of_installments",
+              "value": "4",
+              "type": "text",
+              "uuid": "4739e3cb-75e3-4671-8623-ca159dbfb586"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{local}}/purchases",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "purchases"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Payment Initiate",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "idempotency_key",
+              "value": "pay-110-mbp",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{local}}/installments/9/pay",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "installments",
+            "9",
+            "pay"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Webhook - Payment Confirmed",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "event_id",
+              "value": "evt-0010",
+              "type": "text"
+            },
+            {
+              "key": "event_type",
+              "value": "payment.confirmed",
+              "type": "text",
+              "uuid": "118ddf8c-ea62-4b1e-8834-dfdde94bc26c"
+            },
+            {
+              "key": "payment_id",
+              "value": "4",
+              "type": "text",
+              "uuid": "bed6a3b5-552e-4119-8e85-efd6b72a42b2"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{local}}/webhooks/payments",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "webhooks",
+            "payments"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Overdue Check",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "event_id",
+              "value": "evt-001",
+              "type": "text"
+            },
+            {
+              "key": "event_type",
+              "value": "payment.confirmed",
+              "type": "text",
+              "uuid": "118ddf8c-ea62-4b1e-8834-dfdde94bc26c"
+            },
+            {
+              "key": "payment_id",
+              "value": "1",
+              "type": "text",
+              "uuid": "bed6a3b5-552e-4119-8e85-efd6b72a42b2"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{local}}/overdue/check",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "overdue",
+            "check"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Purchases Details",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{local}}/purchases/3453",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "purchases",
+            "3453"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Merchant Ledger Check",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{local}}/merchants/2/ledger",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "merchants",
+            "2",
+            "ledger"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ledger Check",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{local}}/purchases/3/ledger",
+          "host": [
+            "{{local}}"
+          ],
+          "path": [
+            "purchases",
+            "3",
+            "ledger"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
